@@ -6,6 +6,7 @@ import { useEffect } from "react";
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+
   const [loaded, error] = useFonts({
     'ShadowIntoLight': require("@/assets/fonts/ShadowsIntoLight-Regular.ttf")
   });
@@ -13,15 +14,16 @@ export default function RootLayout() {
     if (loaded || error) {
       SplashScreen.hideAsync();
     }
-  }, [loaded, error]);
-  if (!loaded || error) {
-    return null;
+  }, [loaded, error])
+
+  if (!loaded && !error) {
+    return null
   }
+
   return (
     <Stack>
-      <Stack.Screen name="(tabs)" options={{
-        headerShown: false,
-      }} />
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
     </Stack>
   );
 }

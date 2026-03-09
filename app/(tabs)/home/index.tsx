@@ -37,7 +37,10 @@ export default function HomeScreen(): JSX.Element {
                 </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.button, styles.purple]}>
+            <TouchableOpacity
+                style={[styles.button, styles.purple]}
+                onPress={() => router.push("/(tabs)/map")}
+            >
                 <Text style={styles.buttonText}>
                     Mapa Interactivo
                 </Text>
