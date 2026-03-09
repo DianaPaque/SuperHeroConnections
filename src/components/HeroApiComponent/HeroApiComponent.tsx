@@ -43,10 +43,6 @@ export default function HeroApiComponent() {
         }
     }
 
-    const alPresionarHeroe = (heroe: any) => {
-        router.push({ pathname: "../hero/[id]", params: { id: heroe.id } })
-    }
-
     const renderizarVacio = () => {
         if (cargando) return null
         if (error) return (
@@ -94,17 +90,17 @@ export default function HeroApiComponent() {
             </View>
 
             {!buscado && (
-                <View style={styles.contenedorChips}>
+                <View style={styles.contenedorSugerencias}>
                     {HEROES_POPULARES.map((heroe) => (
                         <TouchableOpacity
                             key={heroe}
-                            style={styles.chip}
+                            style={styles.sugerencia}
                             onPress={() => {
                                 setConsulta(heroe)
                                 buscarHeroe(heroe)
                             }}
                         >
-                            <Text style={styles.textoChip}>{heroe}</Text>
+                            <Text style={styles.textoSugerencia}>{heroe}</Text>
                         </TouchableOpacity>
                     ))}
                 </View>
@@ -127,7 +123,7 @@ export default function HeroApiComponent() {
                 <FlatList
                     data={data}
                     renderItem={({ item }) => (
-                        <HeroCardComponent hero={item} onPress={alPresionarHeroe} />
+                        <HeroCardComponent hero={item} />
                     )}
                     keyExtractor={(item) => item.id?.toString()}
                     ListEmptyComponent={renderizarVacio}
@@ -192,7 +188,7 @@ const styles = StyleSheet.create({
         fontSize: 15
     },
 
-    contenedorChips: {
+    contenedorSugerencias: {
         flexDirection: "row",
         flexWrap: "wrap",
         paddingHorizontal: 16,
@@ -200,7 +196,7 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
 
-    chip: {
+    sugerencia: {
         backgroundColor: "#1f2937",
         paddingHorizontal: 14,
         paddingVertical: 8,
@@ -209,7 +205,7 @@ const styles = StyleSheet.create({
         borderColor: "#374151"
     },
 
-    textoChip: {
+    textoSugerencia: {
         color: "#9ca3af",
         fontSize: 13
     },
@@ -239,10 +235,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         gap: 10,
         paddingBottom: 60
-    },
-
-    iconoVacio: {
-        fontSize: 48
     },
 
     textoVacio: {

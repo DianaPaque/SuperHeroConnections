@@ -201,17 +201,17 @@ export default function ConnectionMapComponent() {
 
                     <Text style={styles.subtitulo}>Héroes populares</Text>
 
-                    <View style={styles.contenedorChips}>
+                    <View style={styles.contenedorSugerencias}>
                         {HEROES_POPULARES.map(h => (
                             <TouchableOpacity
                                 key={h}
-                                style={styles.chip}
+                                style={styles.sugerencia}
                                 onPress={() => {
                                     setBusqueda(h)
                                     buscarHeroe(h)
                                 }}
                             >
-                                <Text style={styles.textoChip}>{h}</Text>
+                                <Text style={styles.textoSugerencia}>{h}</Text>
                             </TouchableOpacity>
                         ))}
                     </View>
@@ -389,13 +389,13 @@ const styles = StyleSheet.create({
         marginTop: 4
     },
 
-    contenedorChips: {
+    contenedorSugerencias: {
         flexDirection: "row",
         flexWrap: "wrap",
         gap: 10
     },
 
-    chip: {
+    sugerencia: {
         backgroundColor: "#1f2937",
         paddingHorizontal: 16,
         paddingVertical: 10,
@@ -404,7 +404,7 @@ const styles = StyleSheet.create({
         borderColor: "#374151"
     },
 
-    textoChip: {
+    textoSugerencia: {
         color: "white",
         fontSize: 14
     },

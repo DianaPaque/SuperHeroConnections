@@ -46,7 +46,10 @@ export default function HomeScreen(): JSX.Element {
                 </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.button, styles.red]}>
+            <TouchableOpacity
+                style={[styles.button, styles.red]}
+                onPress={() => router.push("/(tabs)/favorites" as any)}
+            >
                 <Text style={styles.buttonText}>
                     Favoritos
                 </Text>

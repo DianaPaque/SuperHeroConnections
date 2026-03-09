@@ -1,15 +1,16 @@
-import { useState } from "react"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import { useEffect, useState } from "react"
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 
 interface HeroCardProps {
     hero: any
-    onPress?: (hero: any) => void
 }
 
-export default function HeroCardComponent({ hero, onPress }: HeroCardProps) {
+export default function HeroCardComponent({ hero }: HeroCardProps) {
     console.log("Imagen URL:", hero.name, hero.image?.url)
 
     const [imagenError, setImagenError] = useState(false)
+    const [esFavorito, setEsFavorito] = useState(false)
 
     const editorial = hero.biography?.publisher || "Desconocido"
 
@@ -18,11 +19,41 @@ export default function HeroCardComponent({ hero, onPress }: HeroCardProps) {
             editorial.toLowerCase().includes("dc") ? "#2563eb" :
                 "#9333ea"
 
+    const agregarEliminarFavorito = async () => {
+        try {
+            const datos = await AsyncStorage.getItem("favoritos")
+            const favoritos = datos ? JSON.parse(datos) : []
+
+            if (esFavorito) {
+                const nuevos = favoritos.filter((f: any) => f.id !== hero.id)
+                await AsyncStorage.setItem("favoritos", JSON.stringify(nuevos))
+                setEsFavorito(false)
+            } else {
+                favoritos.push(hero)
+                await AsyncStorage.setItem("favoritos", JSON.stringify(favoritos))
+                setEsFavorito(true)
+            }
+        } catch (e) {
+            console.log("Error:", e)
+        }
+    }
+
+    useEffect(() => {
+        const verificar = async () => {
+            try {
+                const datos = await AsyncStorage.getItem("favoritos")
+                const favoritos = datos ? JSON.parse(datos) : []
+                setEsFavorito(favoritos.some((f: any) => f.id === hero.id))
+            } catch (e) {
+                console.log("Error:", e)
+            }
+        }
+        verificar()
+    }, [hero.id])
+
     return (
-        <TouchableOpacity
+        <View
             style={styles.card}
-            onPress={() => onPress?.(hero)}
-            activeOpacity={0.8}
         >
             <View style={styles.contenedorImagen}>
 
@@ -59,9 +90,18 @@ export default function HeroCardComponent({ hero, onPress }: HeroCardProps) {
                     </Text>
                 </View>
 
+                <TouchableOpacity
+                    style={[styles.botonFavorito, esFavorito && styles.botonFavoritoActivo]}
+                    onPress={agregarEliminarFavorito}
+                >
+                    <Text style={styles.textoFavorito}>
+                        {esFavorito ? "★ Guardado" : "☆ Favorito"}
+                    </Text>
+                </TouchableOpacity>
+
             </View>
 
-        </TouchableOpacity>
+        </View>
     )
 }
 
@@ -132,6 +172,28 @@ const styles = StyleSheet.create({
     etiquetaTexto: {
         color: "white",
         fontSize: 11,
+        fontWeight: "600"
+    },
+
+    botonFavorito: {
+        backgroundColor: "#1f2937",
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        borderRadius: 20,
+        alignSelf: "flex-start",
+        borderWidth: 1,
+        borderColor: "#374151",
+        marginTop: 4
+    },
+
+    botonFavoritoActivo: {
+        backgroundColor: "#854d0e",
+        borderColor: "#ca8a04"
+    },
+
+    textoFavorito: {
+        color: "white",
+        fontSize: 12,
         fontWeight: "600"
     }
 
