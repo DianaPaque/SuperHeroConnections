@@ -1,2 +1,2 @@
-# SuperheroConnections
+# Super Hero Connections
 

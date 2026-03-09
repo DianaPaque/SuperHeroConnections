@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 
 interface HeroCardProps {
@@ -6,6 +7,9 @@ interface HeroCardProps {
 }
 
 export default function HeroCardComponent({ hero, onPress }: HeroCardProps) {
+    console.log("Imagen URL:", hero.name, hero.image?.url)
+
+    const [imagenError, setImagenError] = useState(false)
 
     const editorial = hero.biography?.publisher || "Desconocido"
 
@@ -20,11 +24,24 @@ export default function HeroCardComponent({ hero, onPress }: HeroCardProps) {
             onPress={() => onPress?.(hero)}
             activeOpacity={0.8}
         >
-            <Image
-                source={{ uri: hero.image?.url }}
-                style={styles.image}
-                resizeMode="cover"
-            />
+            <View style={styles.contenedorImagen}>
+
+                <Image
+                    source={{ uri: hero.image?.url }}
+                    style={styles.image}
+                    resizeMode="cover"
+                    onError={() => setImagenError(true)}
+                />
+
+                {imagenError && (
+                    <View style={styles.placeholder}>
+                        <Text style={styles.iniciales}>
+                            {hero.name?.charAt(0) || "?"}
+                        </Text>
+                    </View>
+                )}
+
+            </View>
 
             <View style={styles.info}>
 
@@ -61,9 +78,29 @@ const styles = StyleSheet.create({
         borderColor: "#1f2937"
     },
 
+    contenedorImagen: {
+        width: 100,
+        height: 120
+    },
+
     image: {
         width: 100,
         height: 120
+    },
+
+    placeholder: {
+        width: 100,
+        height: 120,
+        backgroundColor: "#1f2937",
+        justifyContent: "center",
+        alignItems: "center",
+        position: "absolute"
+    },
+
+    iniciales: {
+        color: "#6b7280",
+        fontSize: 36,
+        fontWeight: "bold"
     },
 
     info: {
